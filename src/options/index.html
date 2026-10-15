@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToS Guard - LLM Ayarları</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="options-container">
+    <div class="header">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+      <div>
+        <h1>ToS Guard AI Ayarları</h1>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 2px;">
+          LLM API Anahtarlarınızı (Bring Your Own Key) ve model tercihlerinizi yapılandırın.
+        </p>
+      </div>
+    </div>
+
+    <!-- Güvenlik Bilgilendirme Notu -->
+    <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 8px; padding: 12px 16px; font-size: 12.5px; color: #93c5fd;">
+      🔒 <strong>Gizlilik &amp; Güvenlik Güvencesi:</strong> API anahtarlarınız yalnızca kendi tarayıcınızın yerel <code>chrome.storage.sync</code> alanında saklanır. Hiçbir harici üçüncü taraf sunucuya veya veri tabanına iletilmez. Doğrudan seçtiğiniz yapay zeka sağlayıcısının resmi uç noktasına çağrı yapılır.
+    </div>
+
+    <div class="card">
+      <div class="card-title">1. Aktif LLM Sağlayıcısını Seçin</div>
+      <div class="provider-tabs">
+        <button type="button" class="provider-tab-btn active" data-provider="openai" id="tabOpenAI">
+          OpenAI (GPT-4o)
+        </button>
+        <button type="button" class="provider-tab-btn" data-provider="anthropic" id="tabAnthropic">
+          Anthropic (Claude)
+        </button>
+        <button type="button" class="provider-tab-btn" data-provider="gemini" id="tabGemini">
+          Google Gemini
+        </button>
+      </div>
+    </div>
+
+    <!-- OpenAI Paneli -->
+    <div class="card provider-panel" id="panelOpenAI">
+      <div class="card-title">OpenAI Yapılandırması</div>
+      <div class="form-group">
+        <label for="openaiKey">OpenAI API Key (sk-...)</label>
+        <div class="input-with-action">
+          <input type="password" id="openaiKey" placeholder="sk-proj-..." />
+          <button type="button" class="secondary-btn" id="testOpenAiBtn">Bağlantıyı Test Et</button>
+        </div>
+        <div class="helper-text">platform.openai.com/api-keys üzerinden edinebilirsiniz.</div>
+      </div>
+      <div class="form-group">
+        <label for="openaiModel">Model Seçimi</label>
+        <select id="openaiModel">
+          <option value="gpt-4o-mini">gpt-4o-mini (Hızlı, Ekonomik &amp; Yüksek Doğruluk - Önerilen)</option>
+          <option value="gpt-4o">gpt-4o (En Yüksek Muhakeme Kapasitesi)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="openaiEndpoint">Özel Uç Nokta / Base URL (İsteğe bağlı)</label>
+        <input type="text" id="openaiEndpoint" placeholder="https://api.openai.com/v1/chat/completions" />
+      </div>
+    </div>
+
+    <!-- Anthropic Paneli -->
+    <div class="card provider-panel hidden" id="panelAnthropic" style="display: none;">
+      <div class="card-title">Anthropic Claude Yapılandırması</div>
+      <div class="form-group">
+        <label for="anthropicKey">Anthropic API Key (sk-ant-...)</label>
+        <div class="input-with-action">
+          <input type="password" id="anthropicKey" placeholder="sk-ant-..." />
+          <button type="button" class="secondary-btn" id="testAnthropicBtn">Bağlantıyı Test Et</button>
+        </div>
+        <div class="helper-text">console.anthropic.com/settings/keys üzerinden edinebilirsiniz.</div>
+      </div>
+      <div class="form-group">
+        <label for="anthropicModel">Model Seçimi</label>
+        <select id="anthropicModel">
+          <option value="claude-3-5-sonnet-20241022">claude-3-5-sonnet-20241022 (Üstün Hukuki Analiz)</option>
+          <option value="claude-3-5-haiku-20241022">claude-3-5-haiku-20241022 (Çok Hızlı &amp; Düşük Maliyet)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="anthropicEndpoint">Özel Uç Nokta / Base URL (İsteğe bağlı)</label>
+        <input type="text" id="anthropicEndpoint" placeholder="https://api.anthropic.com/v1/messages" />
+      </div>
+    </div>
+
+    <!-- Gemini Paneli -->
+    <div class="card provider-panel hidden" id="panelGemini" style="display: none;">
+      <div class="card-title">Google Gemini (Google AI Studio) Yapılandırması</div>
+      <div class="form-group">
+        <label for="geminiKey">Gemini API Key (AIzaSy...)</label>
+        <div class="input-with-action">
+          <input type="password" id="geminiKey" placeholder="AIzaSy..." />
+          <button type="button" class="secondary-btn" id="testGeminiBtn">Bağlantıyı Test Et</button>
+        </div>
+        <div class="helper-text">aistudio.google.com/app/apikey üzerinden ücretsiz edinebilirsiniz.</div>
+      </div>
+      <div class="form-group">
+        <label for="geminiModel">Model Seçimi</label>
+        <select id="geminiModel">
+          <option value="gemini-3.8-flash">gemini-3.8-flash (En Güncel & Hızlı - Varsayılan)</option>
+          <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
+          <option value="gemini-1.5-pro-latest">gemini-1.5-pro-latest (Derin Analiz)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="geminiEndpoint">Özel Uç Nokta / Base URL (İsteğe bağlı)</label>
+        <input type="text" id="geminiEndpoint" placeholder="Varsayılan Google AI Studio uç noktası" />
+      </div>
+    </div>
+
+    <!-- Bildirim Mesajı -->
+    <div id="toastMessage" class="alert-box"></div>
+
+    <button type="button" class="primary-btn" id="saveSettingsBtn">
+      <span>Ayarları Kaydet</span>
+    </button>
+  </div>
+
+  <script type="module" src="options.ts"></script>
+</body>
+</html>
